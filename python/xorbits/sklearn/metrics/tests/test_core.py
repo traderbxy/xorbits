@@ -56,6 +56,7 @@ def test_classification():
         recall_score,
     )
 
+<<<<<<< HEAD
     y_true = np.array([0, 1, 2, 0, 1, 2])
     y_pred = np.array([0, 2, 1, 0, 0, 1])
 
@@ -65,26 +66,52 @@ def test_classification():
     )
 
     np.testing.assert_almost_equal(
+=======
+    y_true = np.array([0, 1, 2, 0, 1, 2], dtype=np.int64)
+    y_pred = np.array([0, 2, 1, 0, 0, 1], dtype=np.int64)
+
+    np.testing.assert_array_almost_equal(
+        f1_score(y_true, y_pred, average="macro").execute().fetch(),
+        sklearn_f1_score(y_true, y_pred, average="macro"),
+    )
+    np.testing.assert_array_almost_equal(
+>>>>>>> 6e3975328044438458dc70ca598b60bf5539f2e9
         fbeta_score(y_true, y_pred, beta=0.5, average="macro").execute().fetch(),
         sklearn_fbeta_score(y_true, y_pred, beta=0.5, average="macro"),
     )
 
+<<<<<<< HEAD
     np.testing.assert_almost_equal(
+=======
+    np.testing.assert_array_almost_equal(
+>>>>>>> 6e3975328044438458dc70ca598b60bf5539f2e9
         precision_score(y_true, y_pred, average="macro").execute().fetch(),
         sklearn_precision_score(y_true, y_pred, average="macro"),
     )
 
+<<<<<<< HEAD
     np.testing.assert_almost_equal(
+=======
+    np.testing.assert_array_almost_equal(
+>>>>>>> 6e3975328044438458dc70ca598b60bf5539f2e9
         recall_score(y_true, y_pred, average="macro").execute().fetch(),
         sklearn_recall_score(y_true, y_pred, average="macro"),
     )
 
+<<<<<<< HEAD
     np.testing.assert_almost_equal(
+=======
+    np.testing.assert_array_almost_equal(
+>>>>>>> 6e3975328044438458dc70ca598b60bf5539f2e9
         multilabel_confusion_matrix(y_true, y_pred).execute().fetch(),
         sklearn_multilabel_confusion_matrix(y_true, y_pred),
     )
 
+<<<<<<< HEAD
     np.testing.assert_almost_equal(
+=======
+    np.testing.assert_array_almost_equal(
+>>>>>>> 6e3975328044438458dc70ca598b60bf5539f2e9
         precision_recall_fscore_support(y_true, y_pred)[0].execute().fetch(),
         sklearn_precision_recall_fscore_support(y_true, y_pred)[0],
     )
@@ -139,5 +166,9 @@ def test_ranking():
     )
     expect_m = sklearn_auc(sk_fpr, sk_tpr)
     assert pytest.approx(m.fetch()) == expect_m
+<<<<<<< HEAD
     y_true = np.array([0, 0, 1, 1])
+=======
+    y_true = np.array([0, 0, 1, 1], dtype=np.int64)
+>>>>>>> 6e3975328044438458dc70ca598b60bf5539f2e9
     assert roc_auc_score(y_true, y_true, max_fpr=1) == 1
