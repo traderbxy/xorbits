@@ -18,6 +18,7 @@ from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
 try:
     from pyarrow import NativeFile
@@ -180,13 +181,13 @@ class DataFrameReadCSV(
             return cls._tile_http_url(op)
         if op.compression:
             return cls._tile_compressed(op)
-
         df = op.outputs[0]
         chunk_bytes = df.extra_params.chunk_bytes
         chunk_bytes = int(parse_readable_size(chunk_bytes)[0])
         dtypes = df.dtypes
-
         path_prefix = ""
+        if isinstance(op.path, Path):
+            op.path = op.path.as_posix()
         if isinstance(op.path, (tuple, list)):
             paths = op.path
         elif get_fs(op.path, op.storage_options).isdir(op.path):
@@ -407,7 +408,7 @@ class DataFrameReadCSV(
 
 
 def read_csv(
-    path: str,
+    path: Union[str, Path],
     names: Union[List, Tuple] = None,
     sep: str = ",",
     index_col: Union[int, str, List[int], List[str]] = None,
@@ -743,6 +744,8 @@ def read_csv(
         return op()
 
     # infer dtypes and columns
+    if isinstance(path, Path):
+        path = path.as_posix()
     if isinstance(path, (list, tuple)):
         file_path = path[0]
     elif get_fs(path, storage_options).isdir(path):
@@ -799,7 +802,6 @@ def read_csv(
 
     # convert path to abs_path
     abs_path = convert_to_abspath(path, storage_options)
-
     op = DataFrameReadCSV(
         path=abs_path,
         names=names,
